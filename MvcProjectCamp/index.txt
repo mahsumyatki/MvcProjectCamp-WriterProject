@@ -1,0 +1,127 @@
+﻿Mvc Proje Kampı 1
+
+Models --> İşin veritabanına ait Entity dediğimiz kavramların tanımlandığı kısım.
+Views --> İşin görünümü yani frontend dediğimiz kısımdır.
+Controller --> İşin backend tarafını yani c# kodlama dilinin olduğu alandır. HomeControllers içerisinde yazılır.
+
+HomeController içerisine bakalım. İçerisinde Index() metodu , listeleme işlemleri için kullanılır.
+About() ve Contact() adında da metotlar vardır. Şimdi burada metotlar varsa bu metodların view tarafında da karşılığı olması gerekir.
+
+Şimdi Views klasöründe ve içerisindeki Home klasörüne bakılınca metodların sayfaları görülmektedir. Bu projeyi çalıştırırız.
+Sayfalar arası geçişlerde sabit olan ve değişikliğin olduğu kısımlar vardır. Sabit olanlar layouttur. değişiklik olanlar ise contenttir.
+
+HomeController sayfasında metodların geri dönüş değerleri vardır. Buradakiler şimdilik ActionResult yani aksiyon sonucu türündedir.
+Bende ActionResult türünde Test adında yeni bir metod tanımlarım. İçerisine return View(); derim. Bu da bana bir tane sayfa döndür demektir.
+Bu testin üzerine gelip sağ tıkladığımda Add View seçeneğini seçerim ve karşıma bir menü çıkar. Burada Test isimli sayfamı bir layouta
+bağlamak istediğim için Use a layout page seçerim. Bu layout sayfasını seçmek için de ... kısmına tıklayıp çıkanda Views klasörü altında
+Shared klasörü içerisinde _Layout.cshtml seçilip eklenir ve sayfa eklenir. 
+
+--------------------------------------------------------------
+
+Mvc Proje Kampı 2 
+
+Bu derste kendimiz bir layout, bir controller ve controller'da tanımladığım metottan view oluşturacağız. Yani herşeyi bu sefer kendimiz
+yapacağız. İlk controller ile başlayalım. Controller klasörüne sağ tıklayıp new item diyip MVC5 Controller-Empty seçeriz ve adına
+TestController deriz. Bu oluşturulduktan sonra içerisinde Index metodunu hazır olarak sunar. Ben bu index ActionResult'ı bir view 
+oluşturmak için kullanacağım ama burada view oluşturmadan önce bir tane layout tanımlayacağım. Shared klasörüne sağ tıklayıp add diyip
+view dedikten sonra Use a layout page tiki kaldırılır. Çünkü bu view'ın herhangi bir layoutu kullanmasını istemediğimiz için. Herhangi 
+layoutu kullanmazsa kendisi bir layout olur. _Deneme adı veririz. Ekle dedikten sonra _Deneme adında bir layout geldiğini görürüz.
+Şimdi projeyi bu layout üzerinden çalıştırmak istersem çalışmaz. TestController sayfasında Index metodu üzerinde sağ tıklayıp Add View
+diyerek _Deneme layoutuna bağlar ve çalıştırırız. Bu çalıştırma sonucunda 
+The "RenderBody" method has not been called for layout page "~/Views/Shared/_Deneme.cshtml" hatasını alırız. Bunun anlamı bizim sahip 
+olduğumuz layoutumuzun içerisine sayfaları yüklerken bu sayfaları layoutun hangi kısmına getireceğini bilmemesidir. Bunun için _Deneme
+layoutu içerisinde divler arasında @RenderBody() yazılması durumu çözer.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 3
+
+Katmanlı mimari temelde 3 katmandan oluşmaktadır. Bu katmanlar genellik her projenizde olması gereken katmanlardır. 
+( Sunum - İş - Veri ) Geliştirici bu 3 katmandan daha fazla bir katmanlı yapıda oluşturabilir bu yapıya çok katmanlı mimari 
+denilmektedir. 
+
+1. Sunum Katmanı (Presentation Layer) : Kullanıcı ile etkileşimin yapıldığı katmandır. Burada temel amaç kullanıcıya verileri 
+göstermek ve kullanıcıdan gelen verileri Business Katmanı ile Data Access’e iletmektir.
+2. İş Katmanı (Business Layer) : Data Access  tarafında projeye çekilmiş olan veriler bu katmanda işlenir. Kullanıcıdan gelen 
+veriler önce Business katmanına gider oradan da işlenerek Data Access katmanına aktarılır. Bu katmanda ayrıca bu verilere kimlerin 
+erişeceğini belirtiyoruz. 
+3. Veri Katmanı (Data Access Layer) : Bu katmanda ekleme (Create), okuma (Read), güncelleme (Update) ve silme (Delete) gibi veritabanı 
+işlemleri yapılmaktadır. Bu dört temel işlem CRUD olarak ifade edilir.
+4. Entity Layer : Veri tabanındaki tabloların ve içerisindeki sütunların tanımlanacağı ve bunların C# üzerinde class ve properties 
+(özellikler) olarak ifade edileceği yapıların tutulduğu kısımdır.
+
+Bu dört katmanı projemize ekleyelim. Eklenen her katman yeni bir proje ögesi olarak karşımıza gelecektir.
+ 
+Solution alanına sağ tık > Add > New Project > Visual C# > Class Library (.NET Framework) adımlarını seçerek EntityLayer - 
+DataAccessLayer - BusinessLayer katmanlarını sırasıyla oluşturalım. Oluşturduğumuz proje katmanları otomatik olarak "class1" isimin
+de bir class ile birlikte gelir. Biz bu class1 sınıfını silip kendi sınıflarımızı oluşturacağız.
+
+Projeyi ilk oluşturduğumuzda karşımıza çıkan ilk katman aslında bizim Sunum Katmanımıza karşılık geliyor. Bu nedenle başlangıçta 
+projeyi adlandırırken sonuna UI eklemek mantıklı bir yaklaşım olacaktır.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 4
+
+Entity katmanında oluşturacağımız tabloları ve onların özelliklerini belirtiyoruz.
+
+Heading (Başlık) / Content (İçerik) / Writer (Yazar) / Contact (İletişim) / About (Hakkında) / Category (Kategori) 
+
+EntityLayer sağ tık > Add > New Folder  diyerek "Concrete" isimli yeni bir klasör oluşturuyoruz. Bu klasörde SOMUT olarak tutulan 
+ifadeler yer alacaktır. SOYUT olarak tutulan ifadeleri de ilerleyen adımlarda "Abstract" isimli klasör de tutacağız.
+
+Concrete klasörüne sırası ile Heading / Content / Writer / Contact / About / Category sınıflarını ekliyoruz. Eklediğimiz sınıfların 
+erişim belirleyicilerini (Access Modifiers) "public" yapmalıyız ki diğer alanlardan da erişim sağlanabilsin. 
+
+Sırada oluşturduğumuz her sınıfın (properties) özelliklerini eklemek kaldı. prop yazıp tabx2 yaptığımızda properties formu otomatik 
+olarak gelecektir.
+
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 7
+
+İlişkiler belirlenmeye çalışır. Belirlendikten sonra 1->* ilişkileri görülür. Tek ilişkiye sahip olan içerisine ICollection ile tanımlama yapılır.
+Çok ilişkiye sahip olanda da foreign key tanımlanır ve virtual olarak bir property daha tanımlanır.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 8
+
+Bütün sınıflarda tanımlanan ID'lerin Key olarak atanması gerekir. Örnek olarak About sınıfını ele alalım. Propertylerin en üstüne [Key] yazarak 
+DataAnnotations dediğimiz sınıfa ait attribute'ları kullanıyoruz. Şu an hata geliyor çünkü referansını eklemek gerekiyor. Bunu eklemek yerne Nuget
+içerisinden Entity Framework kurarız. Sonrasında property'lere StringLength attributelarını ekleriz. Bunun yerine FluentValidation da kullanılabillir.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 9
+
+Context tanımlaması yapılacaktır. DataAccess katmanında veritabanı ile işlem yapmak için kullanacağız.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 10
+
+Web config proje ile ilgili bazı yapılandırma ayarlarının yapıldığı kısımdır. Projemizin veritabanı bağlantı adresi burada tanımlanıyor. Projede 
+404 sayfaları ile ilgili ayarlar burada yapılıyor. Projenin bazı oturum ayarları, yetkilendirme ayarları buranın üzerinde gerçekleştiriliyor.
+Webconfig sayfasında system.web taginin bittiği yerin altına bağlantı stringi oluşturmak için ConnectionStrings tagi oluşturulur. İçerisinde
+add name kısmına tablolarımızın veritabanına yansıtılacağı sınıfın ismi ile aynı olmak zorunda olduğundan Context ismini veririz. Devamında
+connection string bağlantısını yazıp ekleriz.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 11
+
+Migration, bizim code first yardımı ile oluşturmuş olduğumuz mimarideki değişiklikleri SQL'e yansıtması için kullanacağımız bir bileşendir.
+Entityler oluşturuldu, connectionstring ile bağlantı hazırlandı, Context tarafında veritabanına yansıtılacak olan sınıflar hazırlandı. Artık 
+bunları veritabanına yansıtma işlemi yapılacak.
+
+Öncelikle View menüsünden Other windows içerisinde Package Manager Console'u açarız. Burada projenin içerisine bir migration ekleyip bunu aktif 
+hale getirmek gerekiyor. Console'da enable-migrations yazıp aktifleştiririz. Bu işlemin yapılması gereken katman Context sınıfının olduğu 
+katmanda yani DataAccessLayerda olmalıdır. Sonrasında önümüze bir Configurations sayfası açılır. Burada AutomaticMigrationsEnabled=false değeri
+default olarak gelir. Biz bunu migration üzerinde değişiklikler yapabilmem için true yapacağız. Şimdi konsolda update-database diyerek değişiklik-
+leri yansıtacağım.
+
+-----------------------------------------------------------
+
+Mvc Proje Kampı 14
